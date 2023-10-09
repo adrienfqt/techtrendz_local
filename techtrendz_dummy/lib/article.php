@@ -11,15 +11,10 @@ function getArticleById(PDO $pdo, int $id):array|bool
 
 function getArticles(PDO $pdo, int $limit = null, int $page = null):array|bool
 {
-
-    /*
-        @todo faire la requête de récupération des articles
-        La requête sera différente selon les paramètres passés, commencer par le BASE de base
-    */
-
-    //$query->execute();
-    //$result = $query->fetchAll(PDO::FETCH_ASSOC);
-    //return $result;
+    $query = $pdo->prepare("Select * FROM articles");
+    $query->execute();
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
 }
 
 function getTotalArticles(PDO $pdo):int|bool
