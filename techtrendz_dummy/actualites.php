@@ -12,15 +12,11 @@ $articles = getArticles($pdo);
 <?php
 
 foreach ($articles as $article){
-    if($article['image']==null){
-        $article['image'] = "assets\images\default-article.jpg";
-    }else{
-        $article['image'] = 'uploads\articles\-' . $article['image'];
-    }
 ?>
     <div class="col-md-4 my-2 d-flex">
         <div class="card">
-            <img src="<?php echo $article['image'] ?> " class="card-img-top" alt="Les meilleurs outils DevOps">
+            <img src="<?php if($article['image'] == null){echo _ARTICLES_DEFAULT_IMAGES_FOLDER_;}else{
+                echo _ARTICLES_IMAGES_FOLDER_.$article['image'];}?>" class="card-img-top" alt="Les meilleurs outils DevOps">
             <div class="card-body">
                 <h5 class="card-title"><?php echo $article['title'] ?></h5>
                 <a href="actualite.php?id=<?php echo $article['id'] ?>" class="btn btn-primary">Lire la suite</a>

@@ -11,7 +11,14 @@ function getArticleById(PDO $pdo, int $id):array|bool
 
 function getArticles(PDO $pdo, int $limit = null, int $page = null):array|bool
 {
-    $query = $pdo->prepare("Select * FROM articles");
+    $sql = "Select * FROM articles order by id DESC";
+    if($limit){
+        $sql = $sql . " Limit :limit";
+    }
+    $query = $pdo->prepare($sql);
+    if ($limit){
+        $query->bindValue(":limit",$limit,PDO::PARAM_INT);
+    }
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
     return $result;
