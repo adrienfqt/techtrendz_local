@@ -15,10 +15,19 @@ function getArticles(PDO $pdo, int $limit = null, int $page = null):array|bool
     if($limit){
         $sql = $sql . " Limit :limit";
     }
+    if($page){
+        $sql = $sql . " offset :offset";
+    }
     $query = $pdo->prepare($sql);
     if ($limit){
         $query->bindValue(":limit",$limit,PDO::PARAM_INT);
     }
+    if($page && $page==1 ){
+        $query->bindValue(":offset",1,PDO::PARAM_INT);
+    }elseif ($page && $page!=1){
+        $query->bindValue(":offset",($page -1)*$limit,PDO::PARAM_INT);
+    }
+    // page -1 * limit
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
     return $result;
