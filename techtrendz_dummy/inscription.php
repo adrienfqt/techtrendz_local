@@ -9,18 +9,27 @@ require_once 'templates/header.php';
 $errors = [];
 $messages = [];
 if (isset($_POST['addUser'])) {
-    /*
-        @todo On appelle addUser pour ajouter l'utilisateur
-        si true a été retourné, on affiche un message "Merci pour votre inscription"
-        sinon on affiche une erreur "Une erreur s'est produite lors de votre inscription"
-    */
+    $add = addUser($pdo,$_POST['first_name'],$_POST['last_name'],$_POST['email'],$_POST['password']);
+    if($add){
+        $messages[] = "Merci pour votre inscription";
+        header("Location: login.php");
+    }else{
+        $errors[]="Une erreur s'est produite lors de votre inscription";
+    }
 }
 
 ?>
+
     <h1>Inscription</h1>
-
-
-    <?php // @todo afficher les erreurs ?>
+    <?php
+        foreach ($errors as $error){
+            ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php $error ?>
+                </div>
+            <?php
+        }
+        ?>
 
     <form method="POST">
         <div class="mb-3">

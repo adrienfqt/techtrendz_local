@@ -10,9 +10,7 @@ require_once 'templates/header.php';
 $errors = [];
 $messages = [];
 
-// Si le formulaire a été soumis
 if (isset($_POST['loginUser'])) {
-    //@todo appeler une méthode verifyUserLoginPassword qui retourne false ou retourne un tableau avec l'utisateur
     $user = verifyUserLoginPassword($pdo, $_POST['email'], $_POST['password']);
     if($user){
         session_start();
@@ -29,14 +27,7 @@ if (isset($_POST['loginUser'])) {
         </div>
         <?php
     }
-
-    /* @todo si on récupère un utilisateur, alors on stocke l'utilisateur dans la session
-        et on redirige l'utilisateur soit vers l'admin (si role admin) soit vers l'accueil
-        sinon on affiche une erreur "Email ou mot de passe incorrect"
-    */
-
   }
-
 ?>
     <h1>Login</h1>
 
