@@ -36,32 +36,23 @@ function getTotalArticles(PDO $pdo):int|bool
     $query = $pdo->prepare("SELECT COUNT(*) as total FROM articles");
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);
-    var_dump($result);
     return $result['total'];
 }
 
 function saveArticle(PDO $pdo, string $title, string $content, string|null $image, int $category_id, int $id = null):bool 
 {
+    $query="";
     if ($id === null) {
-        /*
-            @todo si id est null, alors on fait une requête d'insection
-        */
-        //$query = ...
+        $query = $pdo->prepare("Insert into articles(category_id,title,content,image) Values (:category,:title,:content,:image)");
     } else {
-        /*
-            @todo sinon, on fait un update
-        */
-        
-        //$query = ...
-        
-        //$query->bindValue(':id', $id, $pdo::PARAM_INT);
+        $query = $pdo->prepare("Update articles Set category_id=:category, title=:title, content=:content, image=:image where id =:id");
+        $query->bindValue(":id", $id);
     }
-
-    // @todo on bind toutes les valeurs communes
-   
-
-
-    //return $query->execute();  
+    $query->bindValue(":category", $category_id, PDO::PARAM_INT);
+    $query->bindValue(":title", $title);
+    $query->bindValue(":content", $content);
+    $query->bindValue(":image", $image);
+    return $query->execute();
 }
 
 function deleteArticle(PDO $pdo, int $id):bool
