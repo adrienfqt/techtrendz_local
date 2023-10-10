@@ -22,12 +22,10 @@ function getArticles(PDO $pdo, int $limit = null, int $page = null):array|bool
     if ($limit){
         $query->bindValue(":limit",$limit,PDO::PARAM_INT);
     }
-    if($page && $page==1 ){
-        $query->bindValue(":offset",1,PDO::PARAM_INT);
-    }elseif ($page && $page!=1){
-        $query->bindValue(":offset",($page -1)*$limit,PDO::PARAM_INT);
+    if ($page) {
+        $offset = ($page - 1) * $limit;
+        $query->bindValue(":offset", $offset, PDO::PARAM_INT);
     }
-    // page -1 * limit
     $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
     return $result;
@@ -35,12 +33,11 @@ function getArticles(PDO $pdo, int $limit = null, int $page = null):array|bool
 
 function getTotalArticles(PDO $pdo):int|bool
 {
-    /*
-        @todo récupérer le nombre total d'article (avec COUNT)
-    */
-
-    //$result = $query->fetch(PDO::FETCH_ASSOC);
-    //return $result['total'];
+    $query = $pdo->prepare("SELECT COUNT(*) as total FROM articles");
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    var_dump($result);
+    return $result['total'];
 }
 
 function saveArticle(PDO $pdo, string $title, string $content, string|null $image, int $category_id, int $id = null):bool 
