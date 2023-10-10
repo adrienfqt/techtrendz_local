@@ -57,17 +57,14 @@ function saveArticle(PDO $pdo, string $title, string $content, string|null $imag
 
 function deleteArticle(PDO $pdo, int $id):bool
 {
-    
-    /*
-        @todo Faire la requête de suppression
-    */
 
-    /*
+    $query = $pdo->prepare("Delete from articles where id = :id");
+    $query->bindValue(":id", $id);
     $query->execute();
     if ($query->rowCount() > 0) {
         return true;
     } else {
         return false;
     }
-    */
+
 }
